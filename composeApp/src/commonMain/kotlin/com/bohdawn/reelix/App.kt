@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.unit.dp
+import com.bohdawn.reelix.ui.DetailScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val testMovie = Movie(
@@ -47,33 +48,41 @@ val moviesList = List(20) { index ->
 fun App() {
     MaterialTheme(colorScheme = darkColorScheme()) { // Темна тема для кінотеатру топ
         Surface(modifier = Modifier.fillMaxSize()) {
+            val sampleMovie = Movie(
+                id = 1,
+                title = "Venom: The Last Dance",
+                posterUrl = "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg",
+                rating = 8.5
+            )
 
-            LazyVerticalGrid(
-                // 1. Скільки колонок?
-                // Adaptive(150.dp) означає: "Вмісти стільки колонок, скільки влізе,
-                // але кожна має бути не менше 150dp шириною".
-                columns = GridCells.Adaptive(minSize = 150.dp),
+            DetailScreen(movie = sampleMovie)
 
-                // 2. Відступи навколо всієї сітки (щоб не прилипало до країв екрана)
-                contentPadding = PaddingValues(14.dp),
-
-                // 3. Відступи між картками по вертикалі та горизонталі
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-
-            ) {
-                // 4. Малюємо елементи
-                items(moviesList) { movie ->
-                    MovieItem(
-                        movie = movie,
-                        // Можна додати клік (поки що просто лог)
-                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                            .clickable {
-                                println("Clicked on ${movie.title}")
-                            }
-                    )
-                }
-            }
+//            LazyVerticalGrid(
+//                // 1. Скільки колонок?
+//                // Adaptive(150.dp) означає: "Вмісти стільки колонок, скільки влізе,
+//                // але кожна має бути не менше 150dp шириною".
+//                columns = GridCells.Adaptive(minSize = 150.dp),
+//
+//                // 2. Відступи навколо всієї сітки (щоб не прилипало до країв екрана)
+//                contentPadding = PaddingValues(14.dp),
+//
+//                // 3. Відступи між картками по вертикалі та горизонталі
+//                verticalArrangement = Arrangement.spacedBy(10.dp),
+//                horizontalArrangement = Arrangement.spacedBy(10.dp)
+//
+//            ) {
+//                // 4. Малюємо елементи
+//                items(moviesList) { movie ->
+//                    MovieItem(
+//                        movie = movie,
+//                        // Можна додати клік (поки що просто лог)
+//                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
+//                            .clickable {
+//                                println("Clicked on ${movie.title}")
+//                            }
+//                    )
+//                }
+//            }
         }
     }
 }
