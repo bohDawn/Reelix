@@ -1,4 +1,5 @@
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,11 +24,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun MovieItem(
     movie: Movie,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp)) // Спочатку заокруглюємо кути
+            .clickable { onClick() }        // 👈 3. Робимо всю колонку клікабельною
             // Додаємо рамку або фон, щоб це виглядало як картка
             .background(Color(0xFF1E1E1E))
     ) {
