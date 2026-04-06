@@ -35,19 +35,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun DetailScreen(movie: Movie) {
-    // Використовуємо Card, щоб воно виглядало як спливаюче вікно з кутами
     Card(
-        shape = RoundedCornerShape(24.dp), // 👈 Сильні закруглення
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
         modifier = Modifier
-            .fillMaxWidth() // Ширина на все вікно діалогу
+            .fillMaxWidth()
             .height(600.dp)
     ) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState()) // Скрол всередині картки
+                .verticalScroll(rememberScrollState())
         ) {
-            // БАНЕР
             Box(modifier = Modifier.height(250.dp)) {
                 AsyncImage(
                     model = movie.posterUrl,
@@ -57,7 +55,6 @@ fun DetailScreen(movie: Movie) {
                 )
             }
 
-            // ТЕКСТ
             Column(modifier = Modifier.padding(20.dp)) {
                 Text(
                     text = movie.title,
@@ -77,7 +74,7 @@ fun DetailScreen(movie: Movie) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Eddie and Venom are on the run...", // Твій текст
+                    text = "Eddie and Venom are on the run...", // TODO: Replace mock data with real API response
                     color = Color(0xFFCCCCCC),
                     lineHeight = 22.sp
                 )
