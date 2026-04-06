@@ -1,16 +1,27 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Reelix
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A Kotlin Multiplatform application targeting Android and iOS, designed for browsing and managing movie catalogs. This project demonstrates modern mobile development practices, utilizing a single shared codebase for the UI, business logic, and data layers.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Features
+
+* **Movie Discovery:** Fetching and displaying real-time trending movies and top-rated films using the TMDB API.
+* **Detailed Information:** Comprehensive movie details, including overviews, ratings, cast profiles, and embedded trailers.
+* **Search and Filtering:** Finding specific movies by title, genre, or release year.
+* **Offline Capabilities:** Local caching and a "Favorites" system that allows users to save and view movies without an internet connection.
+
+## Architecture and Technologies
+
+The application is built with scalability and maintainability in mind, adhering to clean architecture principles and a Unidirectional Data Flow (UDF).
+
+* **Framework:** Kotlin Multiplatform (KMP)
+* **UI:** Compose Multiplatform with custom edge-to-edge layouts and glassmorphism effects.
+* **Architecture:** Model-View-ViewModel (MVVM) pattern.
+* **Concurrency:** Kotlin Coroutines and `StateFlow` for reactive state management.
+* **Networking:** Ktor Client and `kotlinx.serialization` for consuming remote REST APIs.
+* **Dependency Injection:** Koin for decoupled component management and automated dependency resolution.
+* **Persistence:** Local database (Room/SQLDelight) for offline caching.
+* **Data Handling:** Repository pattern used as a single source of truth to orchestrate data synchronization between the remote API and the local database.
+
 
 ### Build and Run Android Application
 
@@ -31,5 +42,4 @@ To build and run the development version of the iOS app, use the run configurati
 in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
 
 ---
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+Architected and developed by [bohDawn](https://github.com/bohDawn)
