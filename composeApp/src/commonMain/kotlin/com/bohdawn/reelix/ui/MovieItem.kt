@@ -30,41 +30,36 @@ fun MovieItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp)) // Спочатку заокруглюємо кути
-            .clickable { onClick() }        // 👈 3. Робимо всю колонку клікабельною
-            // Додаємо рамку або фон, щоб це виглядало як картка
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClick() }
             .background(Color(0xFF1E1E1E))
     ) {
-        // 1. Місце під картинку (Заглушка)
         AsyncImage(
-            model = movie.posterUrl, // Сюди прилітає посилання https://...
+            model = movie.posterUrl,
             contentDescription = movie.title,
-            contentScale = ContentScale.Crop, // Картинка заповнює весь простір
-            placeholder = ColorPainter(Color(0xFF2A2A2A)), // Поки вантажиться - сірий
+            contentScale = ContentScale.Crop,
+            placeholder = ColorPainter(Color(0xFF2A2A2A)),
             error = ColorPainter(Color.Red),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(240.dp)
         )
 
-        // 2. Інформація (Тексти)
         Column(
-            modifier = Modifier.padding(12.dp) // Відступ тексту всередині картки
+            modifier = Modifier.padding(12.dp)
         ) {
-            // Назва фільму
             Text(
                 text = movie.title,
-                fontSize = 20.sp, // Більший шрифт
-                fontWeight = FontWeight.Bold, // Жирний
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
                 color = androidx.compose.ui.graphics.Color.White
             )
 
-            // Рейтинг і жанри (імітація)
             Text(
-                text = "⭐ ${movie.rating} • Action, Sci-Fi",
+                text = "⭐ ${movie.rating} • Action, Sci-Fi", // TODO: Replace mock data with real API response
                 fontSize = 14.sp,
                 color = androidx.compose.ui.graphics.Color.LightGray,
-                modifier = Modifier.padding(top = 4.dp) // Відступ від назви
+                modifier = Modifier.padding(top = 4.dp)
             )
         }
     }

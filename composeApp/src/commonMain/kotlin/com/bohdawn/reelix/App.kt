@@ -44,120 +44,36 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
-val testMovie = Movie(
-    id = 1,
-    title = "Venom: The Last Dance",
-    posterUrl = "", // Поки що пустий URL, бо ми вимкнули картинки
-    rating = 8.5
-)
-
 val moviesList = List(20) { index ->
+    // TODO: Replace mock data with real API response
     Movie(
         id = index,
-        title = "Venom: Part ${index + 1}", // Буде Venom 1, Venom 2...
-        // 👇 Встав сюди робоче посилання!
+        title = "Venom: Part ${index + 1}",
         posterUrl = "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg",
-        rating = 8.0 + (index * 0.1) // Рейтинг буде 8.0, 8.1...
+        rating = 8.0 + (index * 0.1)
     )
 }
-
-//var selectedMovie by remember { mutableStateOf<Movie?>(null) }
-//
-//val blurAmount by animateDpAsState(
-//    targetValue = if (selectedMovie != null) 10.dp else 0.dp,
-//    animationSpec = tween(durationMillis = 300), // пів секунди на ефект
-//    label = "blur"
-//)
-
-
-
-//@Composable
-//@Preview
-//fun App() {
-//    MaterialTheme(colorScheme = darkColorScheme()) { // Темна тема для кінотеатру топ
-//        Surface(modifier = Modifier.fillMaxSize()) {
-//            val sampleMovie = Movie(
-//                id = 1,
-//                title = "Venom: The Last Dance",
-//                posterUrl = "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg",
-//                rating = 8.5
-//            )
-//
-//            DetailScreen(movie = sampleMovie)
-
-//            LazyVerticalGrid(
-//                // 1. Скільки колонок?
-//                // Adaptive(150.dp) означає: "Вмісти стільки колонок, скільки влізе,
-//                // але кожна має бути не менше 150dp шириною".
-//                columns = GridCells.Adaptive(minSize = 150.dp),
-//
-//                // 2. Відступи навколо всієї сітки (щоб не прилипало до країв екрана)
-//                contentPadding = PaddingValues(14.dp),
-//
-//                // 3. Відступи між картками по вертикалі та горизонталі
-//                verticalArrangement = Arrangement.spacedBy(10.dp),
-//                horizontalArrangement = Arrangement.spacedBy(10.dp)
-//
-//            ) {
-//                // 4. Малюємо елементи
-//                items(moviesList) { movie ->
-//                    MovieItem(
-//                        movie = movie,
-//                        // Можна додати клік (поки що просто лог)
-//                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
-//                            .clickable {
-//                                println("Clicked on ${movie.title}")
-//                            }
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-//    val moviesList = remember {
-//        List(20) { index ->
-//            Movie(
-//                id = index,
-//                title = "Venom: The Last Dance",
-//                posterUrl = "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg",
-//                rating = 8.5
-//            )
-//        }
-//    }
-
     var selectedMovie by remember { mutableStateOf<Movie?>(null) }
-
-    // ✨ Анімація розмиття:
-    // Якщо фільм є -> розмиття 10.dp, якщо ні -> 0.dp
     val blurAmount by animateDpAsState(
         targetValue = if (selectedMovie != null) 10.dp else 0.dp,
-        animationSpec = tween(durationMillis = 300), // пів секунди на ефект
+        animationSpec = tween(durationMillis = 300),
         label = "blur"
     )
 
     MaterialTheme(colorScheme = darkColorScheme()) {
-        // Ми застосовуємо .blur прямо до Scaffold (це весь наш екран)
         Scaffold(
-            modifier = Modifier.blur(blurAmount), // 👈 ВАЖЛИВО: Розмиваємо весь задній план
+            modifier = Modifier.blur(blurAmount),
         ) {
             LazyVerticalGrid(
-//                 1. Скільки колонок?
-                // Adaptive(150.dp) означає: "Вмісти стільки колонок, скільки влізе,
-                // але кожна має бути не менше 150dp шириною".
                 columns = GridCells.Adaptive(minSize = 150.dp),
-
-                // 2. Відступи навколо всієї сітки (щоб не прилипало до країв екрана)
                 contentPadding = PaddingValues(14.dp),
-
-                // 3. Відступи між картками по вертикалі та горизонталі
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // 4. Малюємо елементи
                 items(moviesList) { movie ->
                     MovieItem(
                         movie = movie,
@@ -166,14 +82,12 @@ fun App() {
                 }
             }
 
-            // 🪟 ДІАЛОГОВЕ ВІКНО (Малюється поверх всього, поза Scaffold)
             if (selectedMovie != null) {
                 Dialog(
                     properties = DialogProperties(usePlatformDefaultWidth = false),
-                    onDismissRequest = { selectedMovie = null } // Закрити при кліку на фон
+                    onDismissRequest = { selectedMovie = null }
                 ) {
                     Box(modifier = Modifier.padding(24.dp)){
-                    // Тут ми викликаємо наш екран деталей
                         DetailScreen(movie = selectedMovie!!)
                     }
                 }
