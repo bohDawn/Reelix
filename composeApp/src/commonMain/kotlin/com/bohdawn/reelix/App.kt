@@ -31,11 +31,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 // А це для анімації розмиття
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,53 +45,53 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-
-val moviesList = List(20) { index ->
-    // TODO: Replace mock data with real API response
-    Movie(
-        id = index,
-        title = "Venom: Part ${index + 1}",
-        posterUrl = "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg",
-        rating = 8.0 + (index * 0.1)
-    )
-}
+import com.bohdawn.reelix.viewmodels.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    var selectedMovie by remember { mutableStateOf<Movie?>(null) }
+    val viewModel = remember { HomeViewModel() }
+    val movies by viewModel.moviesList.collectAsState()
+    val selectedMovie by viewModel.selectedMovie.collectAsState()
+
     val blurAmount by animateDpAsState(
         targetValue = if (selectedMovie != null) 10.dp else 0.dp,
-        animationSpec = tween(durationMillis = 300),
-        label = "blur"
+        label = "blur_animation"
     )
 
-    MaterialTheme(colorScheme = darkColorScheme()) {
+    MaterialTheme {
         Scaffold(
             modifier = Modifier.blur(blurAmount),
-        ) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 150.dp),
-                contentPadding = PaddingValues(14.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFF121212))
             ) {
-                items(moviesList) { movie ->
-                    MovieItem(
-                        movie = movie,
-                        onClick = { selectedMovie = movie }
-                    )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(movies) { movie ->
+                        MovieItem(
+                            movie = movie,
+                            onClick = { viewModel.selectMovie(movie) }
+                        )
+                    }
                 }
             }
+        }
 
-            if (selectedMovie != null) {
-                Dialog(
-                    properties = DialogProperties(usePlatformDefaultWidth = false),
-                    onDismissRequest = { selectedMovie = null }
-                ) {
-                    Box(modifier = Modifier.padding(24.dp)){
-                        DetailScreen(movie = selectedMovie!!)
-                    }
+        selectedMovie?.let { movie ->
+            Dialog(
+                onDismissRequest = { viewModel.clearSelection() },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                Box(modifier = Modifier.padding(24.dp)) {
+                    DetailScreen(movie = movie)
                 }
             }
         }
