@@ -46,54 +46,65 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bohdawn.reelix.viewmodels.HomeViewModel
+import org.koin.compose.KoinApplication
+import org.koin.compose.viewmodel.koinViewModel
+import com.bohdawn.reelix.dependency_injection.appModule
+import org.koin.compose.KoinApplication
+import org.koin.core.KoinApplication
+import org.koin.dsl.koinConfiguration
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    val viewModel = remember { HomeViewModel() }
-    val movies by viewModel.moviesList.collectAsState()
-    val selectedMovie by viewModel.selectedMovie.collectAsState()
+    KoinApplication(configuration = koinConfiguration(declaration = fun KoinApplication.() {
+        modules(appModule)
+    }), content = {
+            val viewModel: HomeViewModel = koinViewModel()
 
-    val blurAmount by animateDpAsState(
-        targetValue = if (selectedMovie != null) 10.dp else 0.dp,
-        label = "blur_animation"
-    )
+            val movies by viewModel.moviesList.collectAsState()
+            val selectedMovie by viewModel.selectedMovie.collectAsState()
 
-    MaterialTheme {
-        Scaffold(
-            modifier = Modifier.blur(blurAmount),
+            val blurAmount by animateDpAsState(
+                targetValue = if (selectedMovie != null) 10.dp else 0.dp,
+                label = "blur_animation"
+            )
 
-        ) { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFF121212))
-            ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier.padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(movies) { movie ->
-                        MovieItem(
-                            movie = movie,
-                            onClick = { viewModel.selectMovie(movie) }
-                        )
+            MaterialTheme {
+                Scaffold(
+                    modifier = Modifier.blur(blurAmount),
+
+                    ) { paddingValues ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFF121212))
+                    ) {
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            modifier = Modifier.padding(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(movies) { movie ->
+                                MovieItem(
+                                    movie = movie,
+                                    onClick = { viewModel.selectMovie(movie) }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                selectedMovie?.let { movie ->
+                    Dialog(
+                        onDismissRequest = { viewModel.clearSelection() },
+                        properties = DialogProperties(usePlatformDefaultWidth = false)
+                    ) {
+                        Box(modifier = Modifier.padding(24.dp)) {
+                            DetailScreen(movie = movie)
+                        }
                     }
                 }
             }
-        }
-
-        selectedMovie?.let { movie ->
-            Dialog(
-                onDismissRequest = { viewModel.clearSelection() },
-                properties = DialogProperties(usePlatformDefaultWidth = false)
-            ) {
-                Box(modifier = Modifier.padding(24.dp)) {
-                    DetailScreen(movie = movie)
-                }
-            }
-        }
-    }
+        })
 }
