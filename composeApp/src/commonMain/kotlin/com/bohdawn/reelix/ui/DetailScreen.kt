@@ -1,6 +1,4 @@
 package com.bohdawn.reelix.ui
-
-import Movie
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.bohdawn.reelix.models.Movie
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -48,7 +47,7 @@ fun DetailScreen(movie: Movie) {
         ) {
             Box(modifier = Modifier.height(250.dp)) {
                 AsyncImage(
-                    model = movie.posterUrl,
+                    model = movie.fullPosterUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth().height(250.dp)
@@ -68,7 +67,7 @@ fun DetailScreen(movie: Movie) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Filled.Star, null, tint = Color(0xFFFFD700))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("${movie.rating}", color = Color.White)
+                    Text("${movie.voteAverage}", color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
