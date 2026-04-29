@@ -34,9 +34,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,11 +87,16 @@ fun App() {
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(movies) { movie ->
-                                MovieItem(
-                                    movie = movie,
-                                    onClick = { viewModel.selectMovie(movie) }
-                                )
+                            itemsIndexed(movies) { index, movie ->
+
+                                MovieItem(movie = movie,
+                                    onClick = { viewModel.selectMovie(movie)})
+
+                                if (index >= movies.size - 3) {
+                                    LaunchedEffect(key1 = Unit) {
+                                        viewModel.loadMovies()
+                                    }
+                                }
                             }
                         }
                     }

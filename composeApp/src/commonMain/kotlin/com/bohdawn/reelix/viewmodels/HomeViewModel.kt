@@ -7,6 +7,7 @@ import com.bohdawn.reelix.models.MovieResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,17 +21,32 @@ class HomeViewModel(private val httpClient: HttpClient) : ViewModel() {
     private val _selectedMovie = MutableStateFlow<Movie?>(null)
     val selectedMovie: StateFlow<Movie?> = _selectedMovie.asStateFlow()
 
+    private var currentPage = 1
+    private var isLoading = false
+
     init {
         loadMovies()
     }
 
-    private fun loadMovies() {
+    fun loadMovies() {
+        if (isLoading) return
+        isLoading = true
+
         viewModelScope.launch {
             try {
-                val response: MovieResponse = httpClient.get("movie/popular").body()
-                _moviesList.value = response.results
+                val response: MovieResponse = httpClient.get("movie/popular") {
+                    parameter("page", currentPage)
+                }.body()
+
+                val currentMovies = _moviesList.value
+                _moviesList.value = currentMovies + response.results
+
+                currentPage++
+
             } catch (e: Exception) {
-                println("Помилка завантаження фільмів: ${e.message}")
+                println("Помилка завантаження: ${e.message}")
+            } finally {
+                isLoading = false
             }
         }
     }
