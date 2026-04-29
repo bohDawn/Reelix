@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.bohdawn.reelix.models.Movie
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -35,7 +36,7 @@ fun MovieItem(
             .background(Color(0xFF1E1E1E))
     ) {
         AsyncImage(
-            model = movie.posterUrl,
+            model = movie.fullPosterUrl,
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             placeholder = ColorPainter(Color(0xFF2A2A2A)),
@@ -56,7 +57,7 @@ fun MovieItem(
             )
 
             Text(
-                text = "⭐ ${movie.rating} • Action, Sci-Fi", // TODO: Replace mock data with real API response
+                text = "⭐ ${movie.voteAverage} • Action, Sci-Fi", // TODO: Replace mock data with real API response
                 fontSize = 14.sp,
                 color = androidx.compose.ui.graphics.Color.LightGray,
                 modifier = Modifier.padding(top = 4.dp)

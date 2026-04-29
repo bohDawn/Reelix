@@ -97,7 +97,7 @@ fun App() {
 
                 selectedMovie?.let { movie ->
                     Dialog(
-                        onDismissRequest = { viewModel.clearSelection() },
+                        onDismissRequest = { viewModel.closeDetails()},
                         properties = DialogProperties(usePlatformDefaultWidth = false)
                     ) {
                         Box(modifier = Modifier.padding(24.dp)) {
