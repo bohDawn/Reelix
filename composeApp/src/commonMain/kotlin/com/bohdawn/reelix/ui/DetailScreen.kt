@@ -1,11 +1,8 @@
 package com.bohdawn.reelix.ui
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.bohdawn.reelix.models.Movie
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.bohdawn.reelix.utils.roundTo
 
 @Composable
 fun DetailScreen(movie: Movie) {
@@ -64,11 +61,7 @@ fun DetailScreen(movie: Movie) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Star, null, tint = Color(0xFFFFD700))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("${movie.voteAverage}", color = Color.White)
-                }
+                Text("⭐ ${movie.voteAverage.roundTo(1)}", color = Color.White)
 
                 Spacer(modifier = Modifier.height(16.dp))
 

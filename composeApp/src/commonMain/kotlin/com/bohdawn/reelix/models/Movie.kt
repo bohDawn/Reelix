@@ -16,7 +16,11 @@ data class Movie(
     val releaseDate: String? = null,
 
     @SerialName("vote_average")
-    val voteAverage: Double = 0.0
+    val voteAverage: Double = 0.0,
+
+    @SerialName("genre_ids")
+    val genreIds: List<Int>,
+
 ) {
     val fullPosterUrl: String
         get() = if (posterPath != null) "https://image.tmdb.org/t/p/w500$posterPath" else ""
